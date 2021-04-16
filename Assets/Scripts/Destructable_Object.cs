@@ -8,6 +8,7 @@ public class Destructable_Object : MonoBehaviour
 
 {
     //health
+    private bool dead = false;
     [SerializeField]
     int health = 100;
 
@@ -15,9 +16,10 @@ public class Destructable_Object : MonoBehaviour
     public void Damage(int dmg)
     {
         health -= dmg; 
-        if (health <= 0)
+        if (health <= 0 && !GetComponent<AudioSource>().isPlaying)
         {
-            Destroy(gameObject);
+            GetComponent<AudioSource>().Play();
+            dead = true;
         }
     }
     
@@ -27,8 +29,11 @@ public class Destructable_Object : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if (dead && !GetComponent<AudioSource>().isPlaying)
+        {
+            Destroy(gameObject);
+        }
     }
 }
